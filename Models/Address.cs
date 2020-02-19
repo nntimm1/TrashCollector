@@ -9,8 +9,8 @@ namespace TrashCollector.Models
     public class Address
     {
         [Key]
-        public int ID { get; set; }
-        public string StreetAddress { get; set }
+        public int AddressID { get; set; }
+        public string StreetAddress { get; set; }
         public string State { get; set; }
         public int ZipCode { get; set; }
         public string City { get; set; }

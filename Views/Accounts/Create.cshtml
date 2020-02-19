@@ -1,0 +1,63 @@
+﻿@model TrashCollector.Models.Account
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Account</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PickUpDay" class="control-label"></label>
+                <input asp-for="PickUpDay" class="form-control" />
+                <span asp-validation-for="PickUpDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OneTimePickUp" class="control-label"></label>
+                <input asp-for="OneTimePickUp" class="form-control" />
+                <span asp-validation-for="OneTimePickUp" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isSuspended" /> @Html.DisplayNameFor(model => model.isSuspended)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDay" class="control-label"></label>
+                <input asp-for="StartDay" class="form-control" />
+                <span asp-validation-for="StartDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDay" class="control-label"></label>
+                <input asp-for="EndDay" class="form-control" />
+                <span asp-validation-for="EndDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Balance" class="control-label"></label>
+                <input asp-for="Balance" class="form-control" />
+                <span asp-validation-for="Balance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HistoryID" class="control-label"></label>
+                <select asp-for="HistoryID" class ="form-control" asp-items="ViewBag.HistoryID"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
