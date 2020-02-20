@@ -34,13 +34,9 @@ namespace TrashCollector.Models
         public IEnumerable<Account> Accounts { get; set; }
 
 
-        [ForeignKey("Application")]
-        [Display(Name = "User Name")]
-
-        public string AppUserId{ get; set; }
-        public IdentityUser ApplicationIdentity { get; set; }
-        [NotMapped]
-        public IEnumerable<ApplicationIdentity> Identities { get; set; }
+        [ForeignKey("IdentityUser")]
+        public string IdentityUserId { get; set; }
+        public IdentityUser IdentityUser { get; set; }
     }
 }
 

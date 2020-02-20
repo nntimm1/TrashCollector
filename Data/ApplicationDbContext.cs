@@ -18,23 +18,12 @@ namespace TrashCollector.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<IdentityRole>()
-                .HasData(new IdentityRole
-                {
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
-                },
-                .HasData(new IdentityRole
-                {
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
-                }
-                ),               
-                .HasData(new IdentityRole
-                {
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
-                };
+            builder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Name = "Customer",
+                NormalizedName = "CUSTOMER"
+            });
+
         }
         public DbSet<TrashCollector.Models.Customer> Customer { get; set; }
         public DbSet<TrashCollector.Models.Employee> Employee { get; set; }

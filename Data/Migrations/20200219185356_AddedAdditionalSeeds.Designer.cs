@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrashCollector.Data;
 
 namespace TrashCollector.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200219185356_AddedAdditionalSeeds")]
+    partial class AddedAdditionalSeeds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,10 +50,24 @@ namespace TrashCollector.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "adb5736a-981f-4cde-8ec1-d6538d0fbe81",
-                            ConcurrencyStamp = "7abb62fe-868a-4fac-b50c-594408def18e",
+                            Id = "5d4bfdfd-f899-4c25-ab70-20971a7916a6",
+                            ConcurrencyStamp = "4c514858-f00b-4ddd-89b7-3808ddddf6c3",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "1b702418-d3a6-4c40-93c4-b8457409f774",
+                            ConcurrencyStamp = "1fd9018f-d806-4cce-b4be-9a44a1d62d1f",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "987ecc68-7934-487d-82a5-b053bf334b8f",
+                            ConcurrencyStamp = "fd9fcd89-5ba8-4ac6-b8e3-31e7edb2a5ae",
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
                         });
                 });
 

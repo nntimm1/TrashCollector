@@ -20,13 +20,22 @@
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                @Html.DisplayNameFor(model => model.Address.StreetAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.ZipCode)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Account)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AppUserId)
+                @Html.DisplayNameFor(model => model.IdentityUserId)
             </th>
             <th></th>
         </tr>
@@ -41,13 +50,19 @@
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address.AddressID)
+                @Html.DisplayFor(modelItem => item.Address.StreetAddress)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Account.AccountId)
+                @Html.DisplayFor(modelItem => item.Address.City)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppUserId)
+                @Html.DisplayFor(modelItem => item.Address.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address.ZipCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdentityUserId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
