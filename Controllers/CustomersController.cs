@@ -162,5 +162,24 @@ namespace TrashCollector.Controllers
         {
             return _context.Customer.Any(e => e.ID == id);
         }
+        // GET: Customers/CustomerView/5
+        public async Task<IActionResult> CustomerView(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var customer = await _context.Customer
+                .Include(c => c.Account)
+                .Include(c => c.Address)
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return View(customer);
+        }
     }
 }
