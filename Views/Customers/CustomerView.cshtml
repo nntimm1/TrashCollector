@@ -48,7 +48,6 @@
     </dl>
 </div>
 <div>
-    <h4>Customer Information</h4>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
@@ -90,4 +89,7 @@
         @Html.DisplayFor(model => model.Account.PickUpDay)
     </dd>
 </dl>
+<div>
+    <a asp-action="OTPRequest" asp-route-id="@Model.Account">Pick Up Request</a> |
+    <a asp-action="SuspendServiceRequest" asp-route-id="@Model.Account">Suspend Service Request</a>
 </div>

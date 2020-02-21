@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -31,16 +32,17 @@ namespace TrashCollector.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToPage("Login");
             }
 
-            var customer = await _context.Customer
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customer
                 .Include(c => c.Account)
                 .Include(c => c.Address)
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .Where(m => m.ID == id).FirstOrDefault();
             if (customer == null)
             {
-                return NotFound();
+                return Create();
             }
 
             return View(customer);
@@ -59,13 +61,13 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,AddressID,AccountID,AppUserId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,StreetAddress,City,State,ZipCode")] Customer customer)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(customer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.SaveChangesAsync();
+                return CustomerView(customer.ID);
             }
             ViewData["AccountID"] = new SelectList(_context.Set<Account>(), "AccountId", "AccountId", customer.AccountID);
             ViewData["AddressID"] = new SelectList(_context.Set<Address>(), "AddressID", "AddressID", customer.AddressID);
@@ -73,14 +75,17 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id) 
         {
-            if (id == null)
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
             {
-                return NotFound();
+                return Create();
             }
-
-            var customer = await _context.Customer.FindAsync(id);
+            var customer = _context.Customer
+             .Include(c => c.Account)
+             .Include(c => c.Address)
+             .Where(m => m.IdentityUserId == userId).FirstOrDefault();
             if (customer == null)
             {
                 return NotFound();
@@ -95,7 +100,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,AddressID,AccountID,AppUserId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, /*[Bind("ID,FirstName,LastName,StreetAddress,City,State,ZipCode")]*/ Customer customer)
         {
             if (id != customer.ID)
             {
@@ -106,21 +111,28 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
+                    var currentCustomer = _context.Customer.Where(m => m.ID == customer.ID)
+                   .Include(c => c.Account)
+                   .Include(c => c.Address).FirstOrDefault();
+
+                    // query for customer from DB
+                    // one at a time apply updates
+
+                    _context.Update(currentCustomer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!CustomerExists(customer.ID))
                     {
-                        return NotFound();
+                        return Create();
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(CustomerView));
             }
             ViewData["AccountID"] = new SelectList(_context.Set<Account>(), "AccountId", "AccountId", customer.AccountID);
             ViewData["AddressID"] = new SelectList(_context.Set<Address>(), "AddressID", "AddressID", customer.AddressID);
@@ -162,21 +174,23 @@ namespace TrashCollector.Controllers
         {
             return _context.Customer.Any(e => e.ID == id);
         }
+
         // GET: Customers/CustomerView/5
-        public async Task<IActionResult> CustomerView(int? id)
-        {
-            if (id == null)
+        public IActionResult CustomerView(int? id)
             {
-                return NotFound();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return RedirectToPage("Login");
             }
 
-            var customer = await _context.Customer
+            var customer = _context.Customer
                 .Include(c => c.Account)
                 .Include(c => c.Address)
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .Where(m => m.IdentityUserId == userId).FirstOrDefault();
             if (customer == null)
             {
-                return NotFound();
+                return Create();
             }
 
             return View(customer);

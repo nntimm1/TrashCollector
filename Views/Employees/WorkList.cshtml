@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<TrashCollector.Models.Customer>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "WorkList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>WorkList</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -20,16 +20,13 @@
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address.StreetAddress)
+                @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address.City)
+                @Html.DisplayNameFor(model => model.Account)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address.State)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address.ZipCode)
+                @Html.DisplayNameFor(model => model.IdentityUser)
             </th>
             <th></th>
         </tr>
@@ -44,16 +41,13 @@
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address.StreetAddress)
+                @Html.DisplayFor(modelItem => item.Address.AddressID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address.City)
+                @Html.DisplayFor(modelItem => item.Account.AccountId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address.ZipCode)
+                @Html.DisplayFor(modelItem => item.IdentityUser.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

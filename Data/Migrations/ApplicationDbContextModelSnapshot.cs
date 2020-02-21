@@ -44,15 +44,6 @@ namespace TrashCollector.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "122031fa-9d97-41dc-a3de-ecb4bf6bdd26",
-                            ConcurrencyStamp = "6929522d-0a80-4cef-97c7-670c56c9a5e0",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

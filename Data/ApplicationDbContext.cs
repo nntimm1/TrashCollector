@@ -14,17 +14,17 @@ namespace TrashCollector.Data
             : base(options)
         {
         }
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+        //    base.OnModelCreating(builder);
 
-            builder.Entity<IdentityRole>().HasData(new IdentityRole
-            {
-                Name = "Customer",
-                NormalizedName = "CUSTOMER"
-            });
+        //    builder.Entity<IdentityRole>().HasData(new IdentityRole
+        //    {
+        //        Name = "Customer",
+        //        NormalizedName = "CUSTOMER"
+        //    });
 
-        }
+        //}
         public DbSet<TrashCollector.Models.Customer> Customer { get; set; }
         public DbSet<TrashCollector.Models.Employee> Employee { get; set; }
         public DbSet<TrashCollector.Models.Account> Account { get; set; }
