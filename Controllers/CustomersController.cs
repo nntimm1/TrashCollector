@@ -61,13 +61,13 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,StreetAddress,City,State,ZipCode")] Customer customer)
+        public async Task<IActionResult> Create(/*[Bind("ID,FirstName,LastName,StreetAddress,City,State,ZipCode")]*/ Customer customer)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(customer);
                 _context.SaveChangesAsync();
-                return CustomerView(customer.ID);
+                return RedirectToAction("Login");
             }
             ViewData["AccountID"] = new SelectList(_context.Set<Account>(), "AccountId", "AccountId", customer.AccountID);
             ViewData["AddressID"] = new SelectList(_context.Set<Address>(), "AddressID", "AddressID", customer.AddressID);
@@ -111,15 +111,11 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    var currentCustomer = _context.Customer.Where(m => m.ID == customer.ID)
-                   .Include(c => c.Account)
-                   .Include(c => c.Address).FirstOrDefault();
 
                     // query for customer from DB
                     // one at a time apply updates
-
-                    _context.Update(currentCustomer);
-                    await _context.SaveChangesAsync();
+                    _context.Update(customer);
+                    _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -181,7 +177,7 @@ namespace TrashCollector.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
-                return RedirectToPage("Login");
+                return Create();
             }
 
             var customer = _context.Customer
