@@ -10,8 +10,8 @@ using TrashCollector.Data;
 namespace TrashCollector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200221135713_NewInitial")]
-    partial class NewInitial
+    [Migration("20200224202730_seeding")]
+    partial class seeding
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,29 @@ namespace TrashCollector.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4e29ca02-c165-47fb-948d-669517b79c7d",
+                            ConcurrencyStamp = "0e60e46a-9195-4fc2-b189-acda1446e462",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "37e87df1-ba92-4874-903e-207506d0f6fe",
+                            ConcurrencyStamp = "f85dbd9d-a1c3-4f7b-a194-6ea9cef66302",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "775b5bf3-dad9-40c3-a9d5-6be45e591a53",
+                            ConcurrencyStamp = "aa20b173-d5f0-4c81-9112-1cde3193e46a",
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -230,9 +253,6 @@ namespace TrashCollector.Migrations
                     b.Property<DateTime>("EndDay")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("HistoryID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("OneTimePickUp")
                         .HasColumnType("datetime2");
 
@@ -246,8 +266,6 @@ namespace TrashCollector.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("AccountId");
-
-                    b.HasIndex("HistoryID");
 
                     b.ToTable("Account");
                 });
@@ -332,24 +350,6 @@ namespace TrashCollector.Migrations
                     b.ToTable("Employee");
                 });
 
-            modelBuilder.Entity("TrashCollector.Models.History", b =>
-                {
-                    b.Property<int>("HistoryID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Completed")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("Pickup")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("HistoryID");
-
-                    b.ToTable("History");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -397,15 +397,6 @@ namespace TrashCollector.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TrashCollector.Models.Account", b =>
-                {
-                    b.HasOne("TrashCollector.Models.History", "History")
-                        .WithMany()
-                        .HasForeignKey("HistoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

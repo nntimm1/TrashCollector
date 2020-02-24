@@ -48,8 +48,8 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="EditCustomer" asp-route-id="@Model.ID">Edit</a> 
+    
 </div>
 <div>
     <h2>Account Details</h2>
@@ -61,17 +61,7 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Account.Balance)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Account.PickUpDay)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Account.PickUpDay)
-        </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Account.AccountId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>
 <h2>Service Requests</h2>
 <hr />
@@ -88,8 +78,13 @@
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.Account.PickUpDay)
     </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Account.isSuspended)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Account.isSuspended)
+    </dd>
 </dl>
 <div>
-    <a asp-action="OTPRequest" asp-route-id="@Model.Account">Pick Up Request</a> |
-    <a asp-action="SuspendServiceRequest" asp-route-id="@Model.Account">Suspend Service Request</a>
+    <a asp-action="EditAccount" asp-route-id="@Model.Account.AccountId">Pick Up Request</a>
 </div>

@@ -1,7 +1,7 @@
 ﻿@model TrashCollector.Models.Account
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Service Requests";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,23 +11,26 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="EditAccountNow">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AccountId" />
             <div class="form-group">
                 <label asp-for="PickUpDay" class="control-label"></label>
-                <input asp-for="PickUpDay" class="form-control" />
+                <Select asp-for="PickUpDay" class="form-control">
+                    <option value="Sunday">Sunday</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                </Select>
                 <span asp-validation-for="PickUpDay" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OneTimePickUp" class="control-label"></label>
                 <input asp-for="OneTimePickUp" class="form-control" />
                 <span asp-validation-for="OneTimePickUp" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isSuspended" /> @Html.DisplayNameFor(model => model.isSuspended)
-                </label>
             </div>
             <div class="form-group">
                 <label asp-for="StartDay" class="control-label"></label>
@@ -40,11 +43,6 @@
                 <span asp-validation-for="EndDay" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Balance" class="control-label"></label>
-                <input asp-for="Balance" class="form-control" />
-                <span asp-validation-for="Balance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -52,7 +50,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="CustomerView">Account View</a>
 </div>
 
 @section Scripts {

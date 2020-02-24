@@ -79,8 +79,8 @@ namespace TrashCollector.Controllers
             return View("CustomerView", customer);
         }
 
-        // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int AddressID) 
+        // GET: Customers/EditCustomer/5
+        public async Task<IActionResult> EditCustomer(int AddressID) 
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -89,57 +89,47 @@ namespace TrashCollector.Controllers
             }
 
             var customer = _context.Customer
-             .Include(c => c.Account)
              .Include(c => c.Address)
              .Where(m => m.IdentityUserId == userId).FirstOrDefault();
+
             if (customer == null)
             {
                 return NotFound();
             }
-            ViewData["AccountID"] = new SelectList(_context.Set<Account>(), "AccountId", "AccountId", customer.AccountID);
             ViewData["AddressID"] = new SelectList(_context.Set<Address>(), "AddressID", "AddressID", customer.AddressID);
             ViewData["IdentityUserId"] = new SelectList(_context.Set<Customer>(), "ID", "ID");
-            return View(customer);
+            return View("EditCustomer", customer);
         }
 
-        // POST: Customers/Edit/5
+        // POST: Customers/EditCustomer/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, /*[Bind("ID,FirstName,LastName,StreetAddress,City,State,ZipCode")]*/ Customer customer)
+        public async Task<IActionResult> EditCustomer(int id, /*[Bind("ID,FirstName,LastName,StreetAddress,City,State,ZipCode")]*/ Customer customer)
         {
             if (id != customer.ID)
             {
                 return NotFound();
             }
+            var customerInDB = _context.Customer
+                .Include(a=>a.Address)
+                .Where(m => m.ID == customer.ID).FirstOrDefault();
+            // change me!.
+            //var addressInDB = _context.Customer.First(m => m.AddressID == customer.AddressID);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
+            customerInDB.FirstName = customer.FirstName;
+            customerInDB.LastName = customer.LastName;
+            customerInDB.Address.StreetAddress = customer.Address.StreetAddress;
+            customerInDB.Address.City = customer.Address.City;
+            customerInDB.Address.State = customer.Address.State;
+            customerInDB.Address.ZipCode = customer.Address.ZipCode;
 
-                    // query for customer from DB
-                    // one at a time apply updates
-                    _context.Update(customer);
-                    _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CustomerExists(customer.ID))
-                    {
-                        return Create();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(CustomerView));
-            }
+            _context.SaveChanges();
+            return RedirectToAction("CustomerView");
+
             ViewData["AccountID"] = new SelectList(_context.Set<Account>(), "AccountId", "AccountId", customer.AccountID);
             ViewData["AddressID"] = new SelectList(_context.Set<Address>(), "AddressID", "AddressID", customer.AddressID);
-            return View(customer);
         }
 
         // GET: Customers/Delete/5
@@ -197,6 +187,51 @@ namespace TrashCollector.Controllers
             }
 
             return View(customer);
+        }
+        // GET: Customers/EditCustomer/5
+        public async Task<IActionResult> EditAccount(int ID)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Create();
+            }
+
+            var customer = _context.Account
+             .Where(m => m.AccountId == ID).First();
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+            return View("EditAccount");
+        }
+
+        // POST: Customers/EditCustomer/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAccountNow(int id, Account account)
+        {
+            if (id != account.AccountId)
+            {
+                return NotFound();
+            }
+            var customerInDB = _context.Account
+                .Where(m => m.AccountId == account.AccountId).FirstOrDefault();
+
+
+            customerInDB.OneTimePickUp = account.OneTimePickUp;
+            customerInDB.StartDay = account.StartDay;
+            customerInDB.EndDay = account.EndDay;
+            customerInDB.PickUpDay = account.PickUpDay;
+
+            _context.SaveChanges();
+            return RedirectToAction("CustomerView");
+
+            //ViewData["AccountID"] = new SelectList(_context.Set<Account>(), "AccountId", "AccountId", account.AccountId);
+            //ViewData["AddressID"] = new SelectList(_context.Set<Address>(), "AddressID", "AddressID", account.AccountId);
         }
     }
 }
