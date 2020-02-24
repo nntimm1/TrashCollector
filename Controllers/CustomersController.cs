@@ -53,6 +53,7 @@ namespace TrashCollector.Controllers
         {
             ViewData["AccountID"] = new SelectList(_context.Set<Account>(), "AccountId", "AccountId");
             ViewData["AddressID"] = new SelectList(_context.Set<Address>(), "AddressID", "AddressID");
+            ViewData["IdentityUserId"] = new SelectList(_context.Set<Customer>(), "ID", "ID");
             return View();
         }
 
@@ -61,27 +62,32 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(/*[Bind("ID,FirstName,LastName,StreetAddress,City,State,ZipCode")]*/ Customer customer)
+        public async Task<IActionResult> Create(Customer customer)
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                customer.IdentityUserId = userId;
+
                 _context.Add(customer);
-                _context.SaveChangesAsync();
-                return RedirectToAction("Login");
+                await _context.SaveChangesAsync();
+                return RedirectToAction("CustomerView","Customers");
             }
             ViewData["AccountID"] = new SelectList(_context.Set<Account>(), "AccountId", "AccountId", customer.AccountID);
             ViewData["AddressID"] = new SelectList(_context.Set<Address>(), "AddressID", "AddressID", customer.AddressID);
-            return View(customer);
+            ViewData["IdentityUserId"] = new SelectList(_context.Set<Customer>(), "ID", "ID"); 
+            return View("CustomerView", customer);
         }
 
         // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int? id) 
+        public async Task<IActionResult> Edit(int AddressID) 
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
                 return Create();
             }
+
             var customer = _context.Customer
              .Include(c => c.Account)
              .Include(c => c.Address)
@@ -92,6 +98,7 @@ namespace TrashCollector.Controllers
             }
             ViewData["AccountID"] = new SelectList(_context.Set<Account>(), "AccountId", "AccountId", customer.AccountID);
             ViewData["AddressID"] = new SelectList(_context.Set<Address>(), "AddressID", "AddressID", customer.AddressID);
+            ViewData["IdentityUserId"] = new SelectList(_context.Set<Customer>(), "ID", "ID");
             return View(customer);
         }
 

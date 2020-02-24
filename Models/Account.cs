@@ -18,12 +18,5 @@ namespace TrashCollector.Models
         public DateTime EndDay { get; set; }
         public double Balance { get; set; }
 
-        [ForeignKey("Account History")]
-        [Display(Name = "AccountHistory")]
-
-        public int HistoryID { get; set; }
-        public History History { get; set; }
-        [NotMapped]
-        public IEnumerable<History> Histories { get; set; }
     }
 }
